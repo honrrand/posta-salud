@@ -19,3 +19,11 @@ Proyecto base desarrollado con Laravel y PostgreSQL para la gestión clínica de
    ```bash
    git clone [https://github.com/honrrand/posta-salud.git](https://github.com/honrrand/posta-salud.git)
    cd posta-salud
+   ## Datos de prueba
+Comando: php artisan migrate:fresh --seed
+
+| Usuario               | Rol             | Contraseña |
+|-----------------------|-----------------|------------|
+| admin@posta.test      | administrador   | password   |
+| medico@posta.test     | personal_medico | password   |
+| recepcion@posta.test  | recepcion       | password   |
