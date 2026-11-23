@@ -12,3 +12,4 @@
 | 8 | Edición sin conflicto de DNI | Editar celular de un paciente manteniendo su mismo DNI | Actualiza los datos sin marcar el DNI como duplicado | OK |
 | 9 | Eliminar paciente con citas | Clic en Eliminar en la ficha de un paciente con citas | Impide borrar y muestra aviso rojo «No se puede eliminar: el paciente tiene citas registradas.» | OK |
 | 10 | Eliminar paciente sin citas | Clic en Eliminar en la ficha de un paciente sin citas | Elimina el registro, redirige al listado y muestra aviso verde | OK |
+| CP15 | Paciente inexistente (RF05) | Abrir `/pacientes/99999` | Muestra página de error 404 Not Found | OK |
