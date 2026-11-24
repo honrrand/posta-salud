@@ -54,17 +54,55 @@ class PersonalMedicoController extends Controller
 
     public function show(PersonalMedico $personalMedico)
     {
-        //
+        $proximas = $personalMedico->citas()
+            ->with('paciente')
+            ->where('fecha_hora', '>=', now())
+            ->whereIn('estado', ['pendiente', 'confirmada'])
+            ->orderBy('fecha_hora')
+            ->take(10)
+            ->get();
+
+        return view('personal-medico.show', [
+            'medico'   => $personalMedico->load('user'),
+            'proximas' => $proximas,
+        ]);
     }
 
     public function edit(PersonalMedico $personalMedico)
     {
-        //
+        return view('personal-medico.edit', [
+            'medico'  => $personalMedico,
+            'cuentas' => $this->cuentasDisponibles($personalMedico),
+        ]);
     }
 
     public function update(UpdatePersonalMedicoRequest $request, PersonalMedico $personalMedico)
     {
-        //
+        $personalMedico->update($request->validated());
+
+        return redirect()->route('personal-medico.show', $personalMedico)
+            ->with('ok', 'Datos del profesional actualizados.');
+    }
+
+    public function cambiarEstado(PersonalMedico $personalMedico)
+    {
+        $personalMedico->update(['activo' => ! $personalMedico->activo]);
+
+        if ($personalMedico->activo) {
+            return back()->with('ok', 'Profesional activado.');
+        }
+
+        $pendientes = $personalMedico->citas()
+            ->where('fecha_hora', '>=', now())
+            ->whereIn('estado', ['pendiente', 'confirmada'])
+            ->count();
+
+        $aviso = 'Profesional desactivado: ya no recibirá nuevas citas (RN04).';
+        if ($pendientes > 0) {
+            $aviso .= " Tiene $pendientes citas próximas por reprogramar.";
+        }
+
+        return back()->with('ok', $aviso);
     }
 
     private function cuentasDisponibles(?PersonalMedico $medico = null)
